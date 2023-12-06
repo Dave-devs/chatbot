@@ -1,7 +1,6 @@
-import colors from 'colors';
+import openai from './config/open-ai.js';
 import readlineSync from 'readline-sync';
-import openai from "./config/open-ai.js";
-
+import colors from 'colors';
 
 async function main() {
     console.log(colors.green('Welcome to Jarlita Chatbot!'));
@@ -21,13 +20,13 @@ async function main() {
             messages.push({ role: 'user', content: prompt });
 
             //Call the API with user prompt
-            const response = await openai.createChatCompletion({
-                model: 'gpt-3.5-turbo',
+            const chatCompletionResponse = await openai.chat.completions.create({
                 messages: [{ role: 'user', content: prompt }],
+                model: 'gpt-3.5-turbo',
             });
 
             //Get completion content
-            const completionResponse = response.data.choices[0].message.content;
+            const completionResponse = chatCompletionResponse.data.choices[0].message.content;
 
             // When user is through with the bot an type 'done'
             if(prompt.toLowerCase() == 'done') {
